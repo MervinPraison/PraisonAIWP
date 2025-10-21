@@ -74,7 +74,27 @@ add_action('admin_init', 'praisonai_add_settings_fields');
 // Render the API key field
 function praisonai_api_key_field_render() {
     $api_key = get_option('praisonai_openai_api_key');
-    echo '<input type="text" name="praisonai_openai_api_key" value="' . esc_attr($api_key) . '" size="50">';
+    echo '<div style="position: relative; display: inline-block; width: 400px;">';
+    echo '<input type="password" id="praisonai_openai_api_key_field" name="praisonai_openai_api_key" value="' . esc_attr($api_key) . '" style="width: 100%; padding-right: 60px;">';
+    echo '<button type="button" id="praisonai_toggle_api_key" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer; border: none; background: #f0f0f1; padding: 4px 8px; border-radius: 3px;">Show</button>';
+    echo '</div>';
+    ?>
+    <script>
+    jQuery(document).ready(function($) {
+        $('#praisonai_toggle_api_key').on('click', function() {
+            var apiKeyField = $('#praisonai_openai_api_key_field');
+            var fieldType = apiKeyField.attr('type');
+            if (fieldType === 'password') {
+                apiKeyField.attr('type', 'text');
+                $(this).text('Hide');
+            } else {
+                apiKeyField.attr('type', 'password');
+                $(this).text('Show');
+            }
+        });
+    });
+    </script>
+    <?php
 }
 
 // Shortcode for the chatbox
