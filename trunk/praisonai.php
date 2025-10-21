@@ -32,7 +32,7 @@ add_action('admin_menu', 'praisonai_add_admin_menu');
 
 // Register settings
 function praisonai_register_settings() {
-    register_setting('praisonai_settings_group', 'praisonai_openai_api_key');
+    register_setting('praisonai_settings_group', 'praisonai_openai_api_key', 'praisonai_sanitize_api_key');
 }
 add_action('admin_init', 'praisonai_register_settings');
 
@@ -100,7 +100,7 @@ function praisonai_api_key_field_render() {
 // Shortcode for the chatbox
 function praisonai_chat_shortcode() {
     // Enqueue scripts and styles only when the shortcode is used
-    wp_enqueue_style('praisonai-chat-style', plugin_dir_url(__FILE__) . 'css/praisonai-chat.css');
+    wp_enqueue_style('praisonai-chat-style', plugin_dir_url(__FILE__) . 'css/praisonai-chat.css', array(), '1.0.0');
     wp_enqueue_script('praisonai-chat-script', plugin_dir_url(__FILE__) . 'js/praisonai-chat.js', array('jquery'), '1.0.0', true);
 
     // Pass data to the script, like the AJAX URL
@@ -129,7 +129,7 @@ function praisonai_handle_chat_message() {
     // Check for a valid AJAX request
     check_ajax_referer('praisonai_chat_nonce', 'nonce');
 
-    $message = sanitize_text_field($_POST['message']);
+    $message = isset($_POST['message']) ? sanitize_text_field(wp_unslash($_POST['message'])) : '';
     $api_key = get_option('praisonai_openai_api_key');
 
     if (empty($api_key)) {
@@ -169,4 +169,9 @@ function praisonai_handle_chat_message() {
 }
 add_action('wp_ajax_praisonai_chat', 'praisonai_handle_chat_message');
 add_action('wp_ajax_nopriv_praisonai_chat', 'praisonai_handle_chat_message'); // For non-logged-in users
+
+// Sanitize the API key
+function praisonai_sanitize_api_key($input) {
+    return sanitize_text_field($input);
+}
 
