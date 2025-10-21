@@ -1,0 +1,51 @@
+# IDE, OS, and local configuration files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+wp-config.php
+.env
+
+# Log files
+*.log
+/vendor/
+composer.lock
+composer.phar
+
+# PHPUnit
+/phpunit.phar
+/phpunit.xml
+/build/
+/coverage/
+
+# PHPSpec
+/spec/
+/phpspec.yml
+
+# Behat
+/features/bootstrap/
+
+# Laravel
+.env
+/storage/logs/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/framework/cache/
+/bootstrap/cache/
+
+# Symfony
+/var/
+.env.local
+.env.*.local
+
+# General
+*.log
+*.sql
+*.zip
+*.rar
+.DS_Store
+Thumbs.db
+
+# Compressed files (for releases)
+*.zip
+*.rar
