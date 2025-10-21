@@ -25,19 +25,128 @@ function praisonai_add_admin_menu() {
         'PraisonAI',
         'manage_options',
         'praisonai',
-        'praisonai_settings_page'
+        'praisonai_settings_page_render'
     );
 }
 add_action('admin_menu', 'praisonai_add_admin_menu');
 
+// Register settings
+function praisonai_register_settings() {
+    register_setting('praisonai_settings_group', 'praisonai_openai_api_key');
+}
+add_action('admin_init', 'praisonai_register_settings');
+
 // Render the settings page
-function praisonai_settings_page() {
+function praisonai_settings_page_render() {
     ?>
     <div class="wrap">
         <h1>PraisonAI Settings</h1>
-        <p>This is the settings page for the PraisonAI plugin.</p>
-        <!-- Future settings will go here -->
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('praisonai_settings_group');
+            do_settings_sections('praisonai');
+            submit_button();
+            ?>
+        </form>
     </div>
     <?php
 }
+
+// Add settings section and fields
+function praisonai_add_settings_fields() {
+    add_settings_section(
+        'praisonai_general_section',
+        'API Settings',
+        null,
+        'praisonai'
+    );
+
+    add_settings_field(
+        'praisonai_openai_api_key',
+        'OpenAI API Key',
+        'praisonai_api_key_field_render',
+        'praisonai',
+        'praisonai_general_section'
+    );
+}
+add_action('admin_init', 'praisonai_add_settings_fields');
+
+// Render the API key field
+function praisonai_api_key_field_render() {
+    $api_key = get_option('praisonai_openai_api_key');
+    echo '<input type="text" name="praisonai_openai_api_key" value="' . esc_attr($api_key) . '" size="50">';
+}
+
+// Shortcode for the chatbox
+function praisonai_chat_shortcode() {
+    // Enqueue scripts and styles only when the shortcode is used
+    wp_enqueue_style('praisonai-chat-style', plugin_dir_url(__FILE__) . 'css/praisonai-chat.css');
+    wp_enqueue_script('praisonai-chat-script', plugin_dir_url(__FILE__) . 'js/praisonai-chat.js', array('jquery'), '1.0.0', true);
+
+    // Pass data to the script, like the AJAX URL
+    wp_localize_script('praisonai-chat-script', 'praisonai_chat_params', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce'    => wp_create_nonce('praisonai_chat_nonce')
+    ));
+
+    // The HTML for the chatbox
+    ob_start();
+    ?>
+    <div class="praisonai-chat-container">
+        <div class="praisonai-chat-history"></div>
+        <form class="praisonai-chat-form">
+            <input type="text" id="praisonai-chat-input" placeholder="Ask anything..." autocomplete="off">
+            <button type="submit" id="praisonai-chat-submit">Send</button>
+        </form>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('praisonai_chat', 'praisonai_chat_shortcode');
+
+// AJAX handler for the chat
+function praisonai_handle_chat_message() {
+    // Check for a valid AJAX request
+    check_ajax_referer('praisonai_chat_nonce', 'nonce');
+
+    $message = sanitize_text_field($_POST['message']);
+    $api_key = get_option('praisonai_openai_api_key');
+
+    if (empty($api_key)) {
+        wp_send_json_error('API key is not set.');
+        return;
+    }
+
+    $api_url = 'https://api.openai.com/v1/chat/completions';
+    $headers = [
+        'Authorization' => 'Bearer ' . $api_key,
+        'Content-Type'  => 'application/json',
+    ];
+    $body = [
+        'model'    => 'gpt-3.5-turbo',
+        'messages' => [['role' => 'user', 'content' => $message]],
+    ];
+
+    $response = wp_remote_post($api_url, [
+        'headers' => $headers,
+        'body'    => json_encode($body),
+        'timeout' => 30,
+    ]);
+
+    if (is_wp_error($response)) {
+        wp_send_json_error('Failed to connect to the API.');
+        return;
+    }
+
+    $response_body = wp_remote_retrieve_body($response);
+    $data = json_decode($response_body, true);
+
+    if (isset($data['choices'][0]['message']['content'])) {
+        wp_send_json_success($data['choices'][0]['message']['content']);
+    } else {
+        wp_send_json_error('Could not get a valid response from the API.');
+    }
+}
+add_action('wp_ajax_praisonai_chat', 'praisonai_handle_chat_message');
+add_action('wp_ajax_nopriv_praisonai_chat', 'praisonai_handle_chat_message'); // For non-logged-in users
 

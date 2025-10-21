@@ -1,0 +1,70 @@
+/* Styles for the PraisonAI Chatbox */
+
+.praisonai-chat-container {
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+.praisonai-chat-history {
+    height: 400px;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.praisonai-chat-message {
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.praisonai-chat-message.user {
+    text-align: right;
+}
+
+.praisonai-chat-message .message-bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+}
+
+.praisonai-chat-message.user .message-bubble {
+    background-color: #007bff;
+    color: white;
+}
+
+.praisonai-chat-message.assistant .message-bubble {
+    background-color: #e9e9eb;
+    color: #333;
+}
+
+.praisonai-chat-form {
+    display: flex;
+    padding: 10px;
+}
+
+#praisonai-chat-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+#praisonai-chat-submit {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+#praisonai-chat-submit:hover {
+    background-color: #0056b3;
+}
