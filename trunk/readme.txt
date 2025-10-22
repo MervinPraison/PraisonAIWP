@@ -4,7 +4,7 @@ Donate link: https://praison.ai/
 Tags: ai, chatbot, openai, gpt, chat
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ Engage your visitors, answer their questions, and provide instant support withou
 1. The PraisonAI chatbot in action on a WordPress page.
 
 == Changelog ==
+
+= 1.0.1 =
+* Minor version bump for resubmission.
 
 = 1.0.0 =
 *   Initial release.
