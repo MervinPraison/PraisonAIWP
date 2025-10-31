@@ -3,9 +3,9 @@
  * Plugin Name: PraisonAI
  * Plugin URI:  https://wordpress.org/plugins/praisonai/
  * Description: Effortlessly integrate a powerful, AI-driven chatbot onto your WordPress site with PraisonAI.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      PraisonAI
- * Author URI:  https://praison.ai/
+ * Author URI:  https://mer.vin/
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: praisonai
