@@ -3,7 +3,7 @@
  * Plugin Name: PraisonAI
  * Plugin URI:  https://wordpress.org/plugins/praisonai/
  * Description: Effortlessly integrate a powerful, AI-driven chatbot onto your WordPress site with PraisonAI.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      PraisonAI
  * Author URI:  https://mer.vin/
  * License:     GPL-2.0-or-later
@@ -29,6 +29,21 @@ function praisonai_add_admin_menu() {
     );
 }
 add_action('admin_menu', 'praisonai_add_admin_menu');
+add_action('admin_enqueue_scripts', 'praisonai_enqueue_admin_scripts');
+
+// Enqueue admin scripts
+function praisonai_enqueue_admin_scripts($hook) {
+    if ($hook !== 'settings_page_praisonai') {
+        return;
+    }
+    wp_enqueue_script(
+        'praisonai-admin',
+        plugin_dir_url(__FILE__) . 'js/praisonai-admin.js',
+        array('jquery'),
+        '1.0.3',
+        true
+    );
+}
 
 // Register settings
 function praisonai_register_settings() {
@@ -78,23 +93,6 @@ function praisonai_api_key_field_render() {
     echo '<input type="password" id="praisonai_openai_api_key_field" name="praisonai_openai_api_key" value="' . esc_attr($api_key) . '" style="width: 100%; padding-right: 60px;">';
     echo '<button type="button" id="praisonai_toggle_api_key" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer; border: none; background: #f0f0f1; padding: 4px 8px; border-radius: 3px;">Show</button>';
     echo '</div>';
-    ?>
-    <script>
-    jQuery(document).ready(function($) {
-        $('#praisonai_toggle_api_key').on('click', function() {
-            var apiKeyField = $('#praisonai_openai_api_key_field');
-            var fieldType = apiKeyField.attr('type');
-            if (fieldType === 'password') {
-                apiKeyField.attr('type', 'text');
-                $(this).text('Hide');
-            } else {
-                apiKeyField.attr('type', 'password');
-                $(this).text('Show');
-            }
-        });
-    });
-    </script>
-    <?php
 }
 
 // Shortcode for the chatbox

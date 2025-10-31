@@ -4,7 +4,7 @@ Donate link: https://mer.vin/
 Tags: ai, chatbot, openai, gpt, chat
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,16 @@ Engage your visitors, answer their questions, and provide instant support withou
 *   **Clean & Modern Interface:** A responsive and user-friendly chat interface that fits seamlessly into any WordPress theme.
 *   **Lightweight & Optimized:** Scripts and styles are loaded only on pages where the chat shortcode is present, ensuring no unnecessary bloat on your site.
 
+== External Services ==
+
+This plugin connects to the OpenAI API to provide AI-powered chat functionality.
+
+Service Used: OpenAI API
+Purpose: The plugin sends user chat messages to OpenAI API to generate intelligent responses.
+Data Sent: User chat message text and conversation context when user submits a message.
+Privacy Policy: https://openai.com/policies/privacy-policy
+Terms of Use: https://openai.com/policies/terms-of-use
+
 == Installation ==
 
 1.  Upload the `praisonai` folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen directly.
@@ -37,6 +47,10 @@ Engage your visitors, answer their questions, and provide instant support withou
 1. The PraisonAI chatbot in action on a WordPress page.
 
 == Changelog ==
+
+= 1.0.3 =
+* Fixed: Properly enqueue admin JavaScript using wp_enqueue_script instead of inline script tags.
+* Added: External Services documentation for OpenAI API usage with privacy policy and terms of use links.
 
 = 1.0.2 =
 * Updated Author URI and Donate link to mer.vin for ownership verification.
